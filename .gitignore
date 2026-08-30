@@ -2,3 +2,5 @@
 .ruff_cache/
 .venv/
 __pycache__/
+app.db
+node_modules/

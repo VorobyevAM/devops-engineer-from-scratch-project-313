@@ -1,2 +1,3 @@
-def main() -> None:
-    print("Hello from devops-engineer-from-scratch-project-313!")
+from devops_engineer_from_scratch_project_313.app import create_app
+
+__all__ = ["create_app"]

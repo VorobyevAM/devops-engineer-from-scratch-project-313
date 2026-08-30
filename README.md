@@ -11,9 +11,13 @@
 ## Стек
 
 - Python
-- Flask
+- FastAPI
+- SQLModel
+- PostgreSQL
+- Node.js
 - uv
 - Docker
+- Nginx
 - Render
 
 ## Установка
@@ -22,19 +26,27 @@
 git clone https://github.com/VorobyevAM/devops-engineer-from-scratch-project-313.git
 cd devops-engineer-from-scratch-project-313
 uv sync --group dev
+npm install
 ```
 
-Для запуска с мониторингом ошибок можно задать переменную окружения `SENTRY_DSN`.
+Основные переменные окружения:
+
+- `DATABASE_URL` — строка подключения к базе данных
+- `BASE_URL` — базовый адрес приложения для формирования `short_url`
+- `SENTRY_DSN` — DSN для мониторинга ошибок
+- `PORT` — порт запуска приложения
+
+Для локальной UI-проверки нужен Node.js LTS не ниже 20.
 
 ## Использование
 
 Запуск приложения:
 
 ```bash
-make run
+DATABASE_URL=sqlite:///./app.db BASE_URL=http://127.0.0.1:8080 make run FRAMEWORK=fastapi
 ```
 
-Приложение стартует на порту `8080`.
+Бэкенд стартует на `http://127.0.0.1:8080`, фронтенд на `http://localhost:5173`.
 
 Проверка маршрута:
 
@@ -46,6 +58,34 @@ curl http://127.0.0.1:8080/ping
 
 ```text
 pong
+```
+
+Примеры API:
+
+```bash
+curl http://127.0.0.1:8080/api/links
+```
+
+```bash
+curl -X POST http://127.0.0.1:8080/api/links \
+  -H "Content-Type: application/json" \
+  -d '{"original_url":"https://example.com/long-url","short_name":"exmpl"}'
+```
+
+```bash
+curl -i http://127.0.0.1:8080/r/exmpl
+```
+
+Фронтенд можно запускать отдельно:
+
+```bash
+make run-frontend
+```
+
+Бэкенд можно запускать отдельно:
+
+```bash
+make run-backend FRAMEWORK=fastapi
 ```
 
 Запуск тестов:
@@ -71,7 +111,11 @@ docker build -t devops-engineer-from-scratch-project-313 .
 Запуск контейнера:
 
 ```bash
-docker run --rm -p 8080:8080 -e PORT=8080 devops-engineer-from-scratch-project-313
+docker run --rm -p 8080:80 \
+  -e PORT=80 \
+  -e DATABASE_URL=sqlite:///./app.db \
+  -e BASE_URL=http://127.0.0.1:8080 \
+  devops-engineer-from-scratch-project-313
 ```
 
 ## Деплой
@@ -82,9 +126,24 @@ docker run --rm -p 8080:8080 -e PORT=8080 devops-engineer-from-scratch-project-3
 
 Для Render Web Service используется `Dockerfile`. В настройках сервиса нужно задать:
 
-- `PORT=8080`
+- `PORT=80`
 - `DATABASE_URL`
+- `BASE_URL`
 - `SENTRY_DSN`
+
+Для PostgreSQL на Render можно использовать внутренний URL базы, а приложение само нормализует схему `postgres://` в формат, который понимает SQLAlchemy.
+
+## UI
+
+Для локальной разработки фронтенд-пакет запускается командой `start-hexlet-devops-deploy-crud-frontend`, а запросы к API разрешены через CORS для `http://localhost:5173`.
+
+В production UI раздаётся Nginx из каталога `/app/public`, а запросы к `/api/*`, `/r/*` и `/ping` проксируются в backend внутри того же контейнера.
+
+После деплоя на Render нужно проверить:
+
+- корень `/` открывает веб-интерфейс
+- `/api/links` отвечает через Nginx без ошибок
+- короткие ссылки `/r/{short_name}` редиректят корректно
 
 ---
 
