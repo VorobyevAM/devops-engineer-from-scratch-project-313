@@ -1,6 +1,13 @@
 FRAMEWORK ?= fastapi
 
 run:
+	@if [ -d node_modules/@hexlet/project-devops-deploy-crud-frontend ] && command -v npx >/dev/null 2>&1; then \
+		npx concurrently -k -n backend,frontend "make run-backend FRAMEWORK=$(FRAMEWORK)" "make run-frontend"; \
+	else \
+		$(MAKE) run-backend FRAMEWORK=$(FRAMEWORK); \
+	fi
+
+run-dev:
 	npx concurrently -k -n backend,frontend "make run-backend FRAMEWORK=$(FRAMEWORK)" "make run-frontend"
 
 run-backend:
