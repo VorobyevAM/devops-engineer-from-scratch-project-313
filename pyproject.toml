@@ -1,0 +1,27 @@
+[project]
+name = "devops-engineer-from-scratch-project-313"
+version = "0.1.0"
+description = "Simple Flask app for the Hexlet DevOps project"
+readme = "README.md"
+authors = [
+    { name = "anatoly", email = "vorobyev.93@mail.ru" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=3.1.3",
+    "gunicorn>=23.0.0",
+    "sentry-sdk[flask]>=2.39.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "ruff>=0.13.0",
+]
+
+[project.scripts]
+devops-engineer-from-scratch-project-313 = "main:run"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
