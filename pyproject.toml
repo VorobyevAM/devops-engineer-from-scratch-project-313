@@ -1,7 +1,7 @@
 [project]
 name = "hexlet-code"
 version = "0.1.0"
-description = "Simple Flask app for the Hexlet DevOps project"
+description = "URL shortener on FastAPI for the Hexlet DevOps project"
 readme = "README.md"
 authors = [
     { name = "anatoly", email = "vorobyev.93@mail.ru" }
