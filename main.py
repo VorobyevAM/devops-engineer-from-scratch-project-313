@@ -2,7 +2,7 @@ import os
 
 import uvicorn
 
-from devops_engineer_from_scratch_project_313.app import create_app
+from hexlet_code.app import create_app
 
 app = create_app()
 

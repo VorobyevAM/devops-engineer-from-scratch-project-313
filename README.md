@@ -122,13 +122,13 @@ docker run --rm -p 8080:80 \
 
 Приложение развернуто на Render:
 
-- Ссылка будет добавлена после создания сервиса на Render
+- https://devops-engineer-from-scratch-project-313-ps33.onrender.com
 
 Для Render Web Service используется `Dockerfile`. В настройках сервиса нужно задать:
 
 - `PORT=80`
 - `DATABASE_URL`
-- `BASE_URL`
+- `BASE_URL=https://devops-engineer-from-scratch-project-313-ps33.onrender.com`
 - `SENTRY_DSN`
 
 Для PostgreSQL на Render можно использовать внутренний URL базы, а приложение само нормализует схему `postgres://` в формат, который понимает SQLAlchemy.

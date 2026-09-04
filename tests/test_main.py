@@ -3,16 +3,15 @@ from collections.abc import Generator
 import pytest
 from fastapi.testclient import TestClient
 
-from devops_engineer_from_scratch_project_313.app import create_app
+from hexlet_code.app import create_app
 
 
 @pytest.fixture
 def client(tmp_path, monkeypatch) -> Generator[TestClient, None, None]:
     database_path = tmp_path / "test.db"
     monkeypatch.setenv("DATABASE_URL", f"sqlite:///{database_path}")
-    monkeypatch.setenv("BASE_URL", "https://short.test")
 
-    with TestClient(create_app()) as test_client:
+    with TestClient(create_app(), base_url="https://short.test") as test_client:
         yield test_client
 
 
